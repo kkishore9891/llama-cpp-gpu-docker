@@ -1,0 +1,47 @@
+{
+    "name": "llama-cpp-python GPU Dev Container",
+    // Use Docker Compose to define and run the container environment
+    "dockerComposeFile": [
+        "../docker/docker-compose.yml" // MODIFIED: Path now points into the 'docker' directory
+    ],
+    // The service defined in docker-compose.yml to use for the dev container
+    "service": "llama-cpp",
+    // The workspace folder inside the container where your project files will be mounted
+    "workspaceFolder": "/app",
+    // The user VS Code Server and terminal will run as inside the container.
+    "remoteUser": "vscode", // Match the non-root user in Dockerfile/Compose
+
+    // Forward the HF token from the host's environment or use localEnv lookup
+    "containerEnv": {
+        // This reads HUGGING_FACE_HUB_TOKEN from your local .env file
+        "HUGGING_FACE_HUB_TOKEN": "${localEnv:HUGGING_FACE_HUB_TOKEN}"
+    },
+
+    // Add useful VS Code extensions to be installed automatically in the container
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",          // Python support
+                "ms-azuretools.vscode-docker", // Docker extension
+                "charliermarsh.ruff",        // Python linter
+                "bierner.markdown-preview-github-styles" // Better Markdown preview
+            ]
+        }
+    },
+
+    // Optional: Run commands after the container is created or attached
+    "postAttachCommand": "echo 'Container attached. GPU available:' && nvidia-smi && echo 'HF Token passed via env var.' && echo 'Run python app/run_gemma.py'",
+
+    // Mount the project folder into the container's workspace
+    "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
+
+    // Ensure the container stays running even if VS Code detaches
+    // Use a specific name for easy identification
+    "runArgs": [
+    "--name=llama-cpp-dev-container", // Optional name kept from before
+    "--gpus=all"                      // <--- ADD THIS LINE
+    ],
+
+    // Shutdown action
+    "shutdownAction": "stopCompose"
+}

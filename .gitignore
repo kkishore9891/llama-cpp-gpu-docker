@@ -1,0 +1,36 @@
+# Environment variables
+.env
+
+# VS Code specific
+.vscode/
+*.code-workspace
+
+# Python cache and virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Data / Cache / Models (can be large)
+data/
+
+# IDE specific files
+.idea/
+*.iml
+nbproject/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.egg-info/

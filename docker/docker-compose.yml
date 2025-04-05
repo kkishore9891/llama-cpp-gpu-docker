@@ -1,0 +1,27 @@
+services:
+  llama-cpp:
+    build:
+      context: ..
+      dockerfile: ./docker/llama_cpp_gpu/Dockerfile
+    container_name: llama_cpp_gpu
+    env_file:
+      - ../.env
+    # ADD Environment Variables for NVIDIA:
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      - ../app:/app
+      - ../data/huggingface:/home/vscode/.cache/huggingface
+      - ../data/models:/models
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    deploy: # Keep this for now, or remove if testing without it
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    user: vscode
